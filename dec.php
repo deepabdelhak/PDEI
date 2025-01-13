@@ -192,15 +192,7 @@ x²
                                 support :)
                                 <a href="mailto:nababurdev@gmail.com">nababurdev@gmail.com</a>
                             </p>
-                            <p>Do you want to develop any php or laravel or wordpress project ? send a mail:) <a
-                                    href="mailto:nababurdev@gmail.com">nababurdev@gmail.com</a> </p>
-                            <p>CEO of GridTemaplate: <a target="_blank"
-                                    href="https://www.gridtemplate.com/">https://www.gridtemplate.com/</a>
-                            </p>
-                            <p>Connect with Github: <a target="_blank"
-                                    href="https://github.com/nababur">https://github.com/nababur</a>
-                            </p>
-
+                       
                         </div>
                     </div>
                 </div>
