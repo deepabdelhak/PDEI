@@ -1,0 +1,554 @@
+
+//the last qeury for select eevet when select service and princpal title 
+SELECT 
+    ed.*,
+    pt.title as principal_title,
+    s.name as subcategory_name,
+    ec.name as category_name,
+    e.staff_service
+FROM eventdetails ed
+JOIN events e ON e.event_id = ed.event_id
+JOIN subcategories s ON ed.subcategory_id = s.id
+JOIN eventcategories ec ON s.category_id = ec.id
+JOIN principal_title pt ON ec.principal_title_id = pt.id
+WHERE pt.title = 'ADMISSION-HOTELLERIE ET LOGISTIQUE'
+AND e.staff_service = 'info';
+
+SELECT 
+    COUNT(*) as total_events
+FROM eventdetails ed
+JOIN events e ON e.event_id = ed.event_id
+JOIN subcategories s ON ed.subcategory_id = s.id
+JOIN eventcategories ec ON s.category_id = ec.id
+JOIN principal_title pt ON ec.principal_title_id = pt.id
+WHERE pt.title = 'ADMISSION-HOTELLERIE ET LOGISTIQUE'
+AND e.staff_service = 'info';
+
+
+
+SELECT 
+    COUNT(*) as total_events
+FROM eventdetails ed
+JOIN events e ON e.event_id = ed.event_id
+JOIN subcategories s ON ed.subcategory_id = s.id
+JOIN eventcategories ec ON s.category_id = ec.id
+JOIN principal_title pt ON ec.principal_title_id = pt.id
+WHERE pt.title = 'ADMISSION-HOTELLERIE ET LOGISTIQUE'
+AND e.staff_service = 'info'
+AND MONTH(e.event_date) = 11
+
+
+    --
+    -- Structure de la table `eventcategories`
+    --
+    CREATE TABLE `eventcategories` (
+    `id` int(11) NOT NULL,
+    `name` varchar(255) NOT NULL,
+    `principal_title_id` int(11) DEFAULT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+    --
+    -- Déchargement des données de la table `eventcategories`
+    --
+    --
+    -- Structure de la table `eventcauses`
+    --
+    CREATE TABLE `eventcauses` (
+    `id` int(11) NOT NULL,
+    `event_id` int(11) DEFAULT NULL,
+    `cause_id` int(11) DEFAULT NULL,
+    `cause_description` text DEFAULT NULL,
+    `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+    --
+    -- Structure de la table `eventconsequences`
+    --
+    CREATE TABLE `eventconsequences` (
+    `id` int(11) NOT NULL,
+    `event_id` int(11) DEFAULT NULL,
+    `consequence_id` int(11) DEFAULT NULL,
+    `consequence_description` text DEFAULT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+    -- --------------------------------------------------------
+    --
+    -- Structure de la table `eventdetails`
+    --
+    CREATE TABLE `eventdetails` (
+    `detail_id` int(11) NOT NULL,
+    `event_id` int(11) DEFAULT NULL,
+    `subcategory_id` int(11) DEFAULT NULL,
+    `description` text DEFAULT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+    --
+    -- Structure de la table `eventotherdetails`
+    --
+    CREATE TABLE `eventotherdetails` (
+    `id` int(11) NOT NULL,
+    `event_id` int(11) DEFAULT NULL,
+    `other_cause` text DEFAULT NULL,
+    `other_consequence` text DEFAULT NULL,
+    `declaration_accident` text DEFAULT NULL,
+    `depot_plainte` text DEFAULT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+    --
+    -- Structure de la table `events`
+    --
+    CREATE TABLE `events` (
+    `event_id` int(11) NOT NULL,
+    `description` text DEFAULT NULL,
+    `other_details` text DEFAULT NULL,
+    `event_date` date DEFAULT NULL,
+    `event_time` time DEFAULT NULL,
+    `end_time` time DEFAULT NULL,
+    `professional` varchar(255) DEFAULT NULL,
+    `order_number` varchar(255) DEFAULT NULL,
+    `formation` set('DG','HS','HME','HMSSP','COHII') DEFAULT NULL,
+    `service` varchar(255) DEFAULT NULL,
+    `declarant_name` varchar(255) NOT NULL,
+    `declarant_function` varchar(255) NOT NULL,
+    `user_name` varchar(255) DEFAULT NULL,
+    `user_ip` varchar(255) DEFAULT NULL,
+    `user_gender` enum('M','F') DEFAULT NULL,
+    `user_service` varchar(255) DEFAULT NULL,
+    `staff_name` varchar(255) DEFAULT NULL,
+    `staff_service` varchar(255) DEFAULT NULL,
+    `staff_function` varchar(255) DEFAULT NULL,
+    `user_id` int(10) UNSIGNED DEFAULT NULL,
+    `userid` int(11) DEFAULT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+    --
+    -- Structure de la table `incident_causes`
+    --
+    CREATE TABLE `incident_causes` (
+    `id` int(11) NOT NULL,
+    `category` enum('Humain','Matériel','Financier') DEFAULT NULL,
+    `description` varchar(255) DEFAULT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+    --
+    -- Structure de la table `incident_consequences`
+    --
+    CREATE TABLE `incident_consequences` (
+    `id` int(11) NOT NULL,
+    `description` varchar(255) DEFAULT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+    --
+    -- Structure de la table `incident_other`
+    --
+    CREATE TABLE `incident_other` (
+    `id` int(11) NOT NULL,
+    `incident_id` int(11) DEFAULT NULL,
+    `other_description` text DEFAULT NULL,
+    `accident_reported` tinyint(1) DEFAULT NULL,
+    `complaint_filed` tinyint(1) DEFAULT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+    --
+    -- Structure de la table `medical_incidents`
+    --
+    CREATE TABLE `medical_incidents` (
+    `id` int(11) NOT NULL,
+    `category_id` int(11) DEFAULT NULL,
+    `subcategory_id` int(11) DEFAULT NULL,
+    `description` text DEFAULT NULL,
+    `date_of_incident` datetime DEFAULT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+    --
+    -- Structure de la table `principal_title`
+    --
+    CREATE TABLE `principal_title` (
+    `id` int(11) NOT NULL,
+    `title` varchar(255) NOT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+    --
+    -- Structure de la table `subcategories`
+    --
+    CREATE TABLE `subcategories` (
+    `id` int(11) NOT NULL,
+    `category_id` int(11) DEFAULT NULL,
+    `name` varchar(255) NOT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+    --
+    -- Structure de la table `tbl_app_autho`
+    --
+    CREATE TABLE `tbl_app_autho` (
+    `id_autho` int(11) NOT NULL,
+    `allow_email` int(11) NOT NULL DEFAULT 0,
+    `fb_autho` int(11) NOT NULL DEFAULT 0,
+    `tw_autho` int(11) NOT NULL DEFAULT 0,
+    `gle_autho` int(11) NOT NULL DEFAULT 0,
+    `git_autho` int(11) NOT NULL DEFAULT 0,
+    `status` int(11) NOT NULL DEFAULT 0
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+    --
+    -- Structure de la table `tbl_app_settings`
+    --
+    CREATE TABLE `tbl_app_settings` (
+    `app_id` int(11) NOT NULL,
+    `app_name` varchar(255) NOT NULL,
+    `title` varchar(255) NOT NULL,
+    `front_name` varchar(255) NOT NULL,
+    `favicon` varchar(255) NOT NULL,
+    `logo` varchar(255) NOT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+    --
+    -- Structure de la table `tbl_permissions`
+    --
+    CREATE TABLE `tbl_permissions` (
+    `perid` int(11) NOT NULL,
+    `per_access` varchar(255) NOT NULL,
+    `per_create` varchar(255) NOT NULL,
+    `per_show` varchar(255) NOT NULL,
+    `per_edit` varchar(255) NOT NULL,
+    `per_delete` varchar(255) NOT NULL,
+    `ban_activ_user` varchar(255) NOT NULL,
+    `per_onlyUser` varchar(255) NOT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+    --
+    -- Structure de la table `tbl_roles`
+    --
+    CREATE TABLE `tbl_roles` (
+    `roleid` int(11) NOT NULL,
+    `rolename` varchar(255) NOT NULL,
+    `roledname` varchar(255) NOT NULL,
+    `permission_items` varchar(255) NOT NULL,
+    `status` int(11) NOT NULL DEFAULT 0
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+    --
+    -- Structure de la table `tbl_users`
+    --
+
+    CREATE TABLE `tbl_users` (
+    `userid` int(11) NOT NULL,
+    `name` varchar(255) NOT NULL,
+    `phone` varchar(255) NOT NULL,
+    `address` varchar(255) NOT NULL,
+    `information` text NOT NULL,
+    `email` varchar(255) NOT NULL,
+    `city` varchar(255) NOT NULL,
+    `country` varchar(255) NOT NULL,
+    `password` varchar(255) NOT NULL,
+    `profilePhoto` varchar(255) NOT NULL,
+    `rolename` varchar(255) NOT NULL,
+    `status` int(11) NOT NULL DEFAULT 0,
+    `gendar` varchar(255) NOT NULL,
+    `create_date` datetime NOT NULL,
+    `lastactivity` int(11) NOT NULL DEFAULT 0
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+    --
+    -- Index pour les tables déchargées
+    --
+
+    --
+    -- Index pour la table `eventcategories`
+    --
+    ALTER TABLE `eventcategories`
+    ADD PRIMARY KEY (`id`),
+    ADD KEY `fk_principal_title` (`principal_title_id`);
+
+    --
+    -- Index pour la table `eventcauses`
+    --
+    ALTER TABLE `eventcauses`
+    ADD PRIMARY KEY (`id`),
+    ADD KEY `event_id` (`event_id`),
+    ADD KEY `cause_id` (`cause_id`);
+
+    --
+    -- Index pour la table `eventconsequences`
+    --
+    ALTER TABLE `eventconsequences`
+    ADD PRIMARY KEY (`id`),
+    ADD KEY `event_id` (`event_id`),
+    ADD KEY `consequence_id` (`consequence_id`);
+
+    --
+    -- Index pour la table `eventdetails`
+    --
+    ALTER TABLE `eventdetails`
+    ADD PRIMARY KEY (`detail_id`),
+    ADD KEY `event_id` (`event_id`),
+    ADD KEY `subcategory_id` (`subcategory_id`);
+
+    --
+    -- Index pour la table `eventotherdetails`
+    --
+    ALTER TABLE `eventotherdetails`
+    ADD PRIMARY KEY (`id`),
+    ADD KEY `event_id` (`event_id`);
+
+    --
+    -- Index pour la table `events`
+    --
+    ALTER TABLE `events`
+    ADD PRIMARY KEY (`event_id`),
+    ADD KEY `fk_user_event` (`userid`);
+
+    --
+    -- Index pour la table `incident_causes`
+    --
+    ALTER TABLE `incident_causes`
+    ADD PRIMARY KEY (`id`);
+
+    --
+    -- Index pour la table `incident_consequences`
+    --
+    ALTER TABLE `incident_consequences`
+    ADD PRIMARY KEY (`id`);
+
+    --
+    -- Index pour la table `incident_other`
+    --
+    ALTER TABLE `incident_other`
+    ADD PRIMARY KEY (`id`),
+    ADD KEY `incident_id` (`incident_id`);
+
+    --
+    -- Index pour la table `medical_incidents`
+    --
+    ALTER TABLE `medical_incidents`
+    ADD PRIMARY KEY (`id`),
+    ADD KEY `category_id` (`category_id`),
+    ADD KEY `subcategory_id` (`subcategory_id`);
+
+    --
+    -- Index pour la table `principal_title`
+    --
+    ALTER TABLE `principal_title`
+    ADD PRIMARY KEY (`id`);
+
+    --
+    -- Index pour la table `subcategories`
+    --
+    ALTER TABLE `subcategories`
+    ADD PRIMARY KEY (`id`),
+    ADD KEY `category_id` (`category_id`);
+
+    --
+    -- Index pour la table `tbl_app_autho`
+    --
+    ALTER TABLE `tbl_app_autho`
+    ADD PRIMARY KEY (`id_autho`);
+
+    --
+    -- Index pour la table `tbl_app_settings`
+    --
+    ALTER TABLE `tbl_app_settings`
+    ADD PRIMARY KEY (`app_id`);
+
+    --
+    -- Index pour la table `tbl_permissions`
+    --
+    ALTER TABLE `tbl_permissions`
+    ADD PRIMARY KEY (`perid`);
+
+    --
+    -- Index pour la table `tbl_roles`
+    --
+    ALTER TABLE `tbl_roles`
+    ADD PRIMARY KEY (`roleid`);
+
+    --
+    -- Index pour la table `tbl_users`
+    --
+    ALTER TABLE `tbl_users`
+    ADD PRIMARY KEY (`userid`);
+
+    --
+    -- AUTO_INCREMENT pour les tables déchargées
+    --
+
+    --
+    -- AUTO_INCREMENT pour la table `eventcategories`
+    --
+    ALTER TABLE `eventcategories`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+    --
+    -- AUTO_INCREMENT pour la table `eventcauses`
+    --
+    ALTER TABLE `eventcauses`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+    --
+    -- AUTO_INCREMENT pour la table `eventconsequences`
+    --
+    ALTER TABLE `eventconsequences`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+    --
+    -- AUTO_INCREMENT pour la table `eventdetails`
+    --
+    ALTER TABLE `eventdetails`
+    MODIFY `detail_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+    --
+    -- AUTO_INCREMENT pour la table `eventotherdetails`
+    --
+    ALTER TABLE `eventotherdetails`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+    --
+    -- AUTO_INCREMENT pour la table `events`
+    --
+    ALTER TABLE `events`
+    MODIFY `event_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+
+    --
+    -- AUTO_INCREMENT pour la table `incident_causes`
+    --
+    ALTER TABLE `incident_causes`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+    --
+    -- AUTO_INCREMENT pour la table `incident_consequences`
+    --
+    ALTER TABLE `incident_consequences`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+    --
+    -- AUTO_INCREMENT pour la table `incident_other`
+    --
+    ALTER TABLE `incident_other`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+    --
+    -- AUTO_INCREMENT pour la table `medical_incidents`
+    --
+    ALTER TABLE `medical_incidents`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+    --
+    -- AUTO_INCREMENT pour la table `principal_title`
+    --
+    ALTER TABLE `principal_title`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+    --
+    -- AUTO_INCREMENT pour la table `subcategories`
+    --
+    ALTER TABLE `subcategories`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+
+    --
+    -- AUTO_INCREMENT pour la table `tbl_app_autho`
+    --
+    ALTER TABLE `tbl_app_autho`
+    MODIFY `id_autho` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=144;
+
+    --
+    -- AUTO_INCREMENT pour la table `tbl_app_settings`
+    --
+    ALTER TABLE `tbl_app_settings`
+    MODIFY `app_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+    --
+    -- AUTO_INCREMENT pour la table `tbl_permissions`
+    --
+    ALTER TABLE `tbl_permissions`
+    MODIFY `perid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+    --
+    -- AUTO_INCREMENT pour la table `tbl_roles`
+    --
+    ALTER TABLE `tbl_roles`
+    MODIFY `roleid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=225;
+
+    --
+    -- AUTO_INCREMENT pour la table `tbl_users`
+    --
+    ALTER TABLE `tbl_users`
+    MODIFY `userid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=126;
+
+    --
+    -- Contraintes pour les tables déchargées
+    --
+
+    --
+    -- Contraintes pour la table `eventcategories`
+    --
+    ALTER TABLE `eventcategories`
+    ADD CONSTRAINT `fk_principal_title` FOREIGN KEY (`principal_title_id`) REFERENCES `principal_title` (`id`);
+
+    --
+    -- Contraintes pour la table `eventcauses`
+    --
+    ALTER TABLE `eventcauses`
+    ADD CONSTRAINT `eventcauses_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE,
+    ADD CONSTRAINT `eventcauses_ibfk_2` FOREIGN KEY (`cause_id`) REFERENCES `incident_causes` (`id`) ON DELETE SET NULL;
+
+    --
+    -- Contraintes pour la table `eventconsequences`
+    --
+    ALTER TABLE `eventconsequences`
+    ADD CONSTRAINT `eventconsequences_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE,
+    ADD CONSTRAINT `eventconsequences_ibfk_2` FOREIGN KEY (`consequence_id`) REFERENCES `incident_consequences` (`id`) ON DELETE SET NULL;
+
+    --
+    -- Contraintes pour la table `eventdetails`
+    --
+    ALTER TABLE `eventdetails`
+    ADD CONSTRAINT `eventdetails_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`),
+    ADD CONSTRAINT `eventdetails_ibfk_2` FOREIGN KEY (`subcategory_id`) REFERENCES `subcategories` (`id`);
+
+    --
+    -- Contraintes pour la table `eventotherdetails`
+    --
+    ALTER TABLE `eventotherdetails`
+    ADD CONSTRAINT `eventotherdetails_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE;
+
+    --
+    -- Contraintes pour la table `events`
+    --
+    ALTER TABLE `events`
+    ADD CONSTRAINT `fk_user_event` FOREIGN KEY (`userid`) REFERENCES `tbl_users` (`userid`) ON DELETE CASCADE;
+
+    --
+    -- Contraintes pour la table `incident_other`
+    --
+    ALTER TABLE `incident_other`
+    ADD CONSTRAINT `incident_other_ibfk_1` FOREIGN KEY (`incident_id`) REFERENCES `medical_incidents` (`id`) ON DELETE CASCADE;
+
+    --
+    -- Contraintes pour la table `medical_incidents`
+    --
+    ALTER TABLE `medical_incidents`
+    ADD CONSTRAINT `medical_incidents_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `eventcategories` (`id`),
+    ADD CONSTRAINT `medical_incidents_ibfk_2` FOREIGN KEY (`subcategory_id`) REFERENCES `subcategories` (`id`);
+
+    --
+    -- Contraintes pour la table `subcategories`
+    --
+    ALTER TABLE `subcategories`
+    ADD CONSTRAINT `subcategories_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `eventcategories` (`id`);
+    COMMIT;
+
+    /
+
+
+
+
+
+
+
+
+    -----------qeury
+
+
+    SELECT 
+    e.event_id,
+    e.description AS event_description,
+    ec.id AS category_id,
+    ec.name AS category_name,
+    pt.id AS principal_title_id,
+    pt.title AS principal_title
+FROM events e
+LEFT JOIN eventdetails ed ON e.event_id = ed.event_id
+LEFT JOIN subcategories s ON ed.subcategory_id = s.id
+LEFT JOIN eventcategories ec ON s.category_id = ec.id
+LEFT JOIN principal_title pt ON ec.principal_title_id = pt.id
+WHERE e.event_id = 53;
+
+
+
+
+
+SoinsEtUsagers5
